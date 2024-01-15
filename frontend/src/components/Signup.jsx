@@ -3,6 +3,7 @@ import { BiShow } from "react-icons/bi";
 import { BiSolidHide } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import ImageToBase64 from "../utilities/ImageToBase64";
+import toast from "react-hot-toast";
 
 
 const Signup = () => {
@@ -33,9 +34,9 @@ const Signup = () => {
         const { firstName, lastName, email, password, confirmPassword } = data;
         if (firstName && lastName && email && password && confirmPassword) {
             if (password === confirmPassword) {
-                alert("Sign Up Successful");
+                // alert("Sign Up Successful");
                 // window.location.href = "/login";
-                navigate("/login");
+                
 
                 const res = await fetch(`${process.env.REACT_APP_SERVER_DOMAIN}/signup`, {
                     method: "POST",
@@ -46,16 +47,20 @@ const Signup = () => {
                 });
 
                 
-                await res.json();
+                const dataRes = await res.json();
+                // alert(dataRes.message)
+                toast(dataRes.message);
 
-                
+                if(dataRes.alert) {
+                    navigate("/login");
+                }
             }
             else {
-                alert("Passwords do not match");
+                toast("Passwords do not match");
             }
         }
         else {
-            alert("Please fill in all the fields");
+            toast("Please fill in all the fields");
         }
     }
 
