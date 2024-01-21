@@ -2,6 +2,8 @@ import React from "react";
 import toast from "react-hot-toast";
 import { BiShow, BiSolidHide } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
+import {useSelector, useDispatch} from 'react-redux'
+import { loginRedux } from "../redux/userSlice";
 
 
 const Login = () => {
@@ -11,6 +13,10 @@ const Login = () => {
         email: "",
         password: "",
     });
+
+    const userData = useSelector(state => state);
+    // console.log(userData);
+    const dispatch = useDispatch();
 
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value });
@@ -31,11 +37,16 @@ const Login = () => {
 
             const dataRes = await response.json();
 
-            toast(dataRes.message);
+            toast( dataRes.message);
 
             if (dataRes.alert) {
-                navigate("/")
+
+                dispatch(loginRedux(dataRes))
+                setTimeout(() => {
+                    navigate("/"); 
+                }, 1500);
             }
+            console.log(userData);
 
         }
         else {

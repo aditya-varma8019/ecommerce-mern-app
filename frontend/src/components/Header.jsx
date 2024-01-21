@@ -1,11 +1,27 @@
 import React, { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { FaCartShopping } from "react-icons/fa6";
 import { LuUserCircle } from "react-icons/lu";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutRedux } from "../redux/userSlice";
+import toast from "react-hot-toast";
+
 
 const Header = () => {
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [showDropDown, setShowDropDown] = useState(false);
+  const userData = useSelector(state => state.user);
+  // console.log(userData.user);
+
+  const handleLogout = () => {
+    dispatch(logoutRedux());
+    toast("Logged out successfully")
+    setTimeout(() => {
+      navigate("/login"); 
+  }, 1500);
+    setShowDropDown(false);
+  }
 
   return (
     <>
@@ -31,11 +47,11 @@ const Header = () => {
               <div className="absolute text-sm -top-2 -right-1 text-white bg-red-600 rounded-full m-0 p-0 text-center w-4">0</div>
             </div>
             <div className="text-slate-600 " onClick={() => setShowDropDown(!showDropDown)}>
-              <div className="cursor-pointer text-4xl"><LuUserCircle /></div>
+              {userData.user.image ? <img className=" rounded-xl overflow-hidden drop-shadow-md cursor-pointer" src={userData.user.image}  alt="user" width={30} height={30} /> : <div className="cursor-pointer text-4xl"><LuUserCircle /></div>}
               {showDropDown && (
                 <div className="text-lg absolute right-2 bg-white px-2 py-2 shadow drop-shadow-md">
                   <Link to={"newproduct"} className="whitespace-nowrap cursor-pointer block">New Product</Link>
-                  <Link to={"login"} className="whitespace-nowrap cursor-pointer block">Login</Link>
+                  {userData.user.email ? <p className=" cursor-pointer" onClick={handleLogout} >Logout</p> : <Link to={"login"} className="whitespace-nowrap cursor-pointer block">Login</Link>}
                 </div>
               )}
             </div>
