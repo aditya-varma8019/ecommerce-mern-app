@@ -12,7 +12,7 @@ const Header = () => {
   const navigate = useNavigate();
   const [showDropDown, setShowDropDown] = useState(false);
   const userData = useSelector(state => state.user);
-  // console.log(userData.user);
+  // console.log(userData.user.email);
 
   const handleLogout = () => {
     dispatch(logoutRedux());
@@ -22,7 +22,7 @@ const Header = () => {
   }, 1500);
     setShowDropDown(false);
   }
-
+  // console.log(process.env.REACT_APP_ADMIN_EMAIL);
   return (
     <>
       <nav className="fixed w-full h-16 px-2 md:px-4 border-b-2 bg-white">
@@ -50,8 +50,9 @@ const Header = () => {
               {userData.user.image ? <img className=" rounded-xl overflow-hidden drop-shadow-md cursor-pointer" src={userData.user.image}  alt="user" width={30} height={30} /> : <div className="cursor-pointer text-4xl"><LuUserCircle /></div>}
               {showDropDown && (
                 <div className="text-lg absolute right-2 bg-white px-2 py-2 shadow drop-shadow-md">
-                  <Link to={"newproduct"} className="whitespace-nowrap cursor-pointer block">New Product</Link>
-                  {userData.user.email ? <p className=" cursor-pointer" onClick={handleLogout} >Logout</p> : <Link to={"login"} className="whitespace-nowrap cursor-pointer block">Login</Link>}
+                  {process.env.REACT_APP_ADMIN_EMAIL === userData.user.email && <Link to={"newproduct"} className="whitespace-nowrap cursor-pointer block">New Product</Link> }
+                  
+                  {userData.user.email ? <p className=" cursor-pointer" onClick={handleLogout} >Logout ({userData.user.firstName.toUpperCase()})</p> : <Link to={"login"} className="whitespace-nowrap cursor-pointer block">Login</Link>}
                 </div>
               )}
             </div>

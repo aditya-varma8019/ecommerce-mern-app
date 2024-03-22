@@ -46,7 +46,7 @@ const Login = () => {
                     navigate("/"); 
                 }, 1500);
             }
-            console.log(userData);
+            // console.log(userData);
 
         }
         else {

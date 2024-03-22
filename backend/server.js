@@ -108,4 +108,12 @@ app.post("/newproduct", async (req, res) => {
     }
 })
 
+// api home page
+
+app.get("/", async (req, res) => {
+    const fetchedData = await Product.find({});
+    
+    res.send(JSON.stringify(fetchedData))
+})
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

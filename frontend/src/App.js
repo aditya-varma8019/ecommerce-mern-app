@@ -11,14 +11,33 @@ import NewProduct from './components/NewProduct';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import { Toaster } from 'react-hot-toast';
+import { useEffect } from 'react';
+import { setDataProduct } from './redux/productSlice';
+import { useDispatch, useSelector } from 'react-redux';
+
 
 function App() {
+
+  const dispatch = useDispatch();
+  const productData = useSelector(state => state.product)
+
+
+  useEffect(() => {
+    (async () => {
+      const resData = await fetch(`${process.env.REACT_APP_SERVER_DOMAIN}/`)
+      const data = await resData.json();
+      // console.log(data);
+      dispatch(setDataProduct(data));
+    })()
+  }, [])
+  // console.log(productData);
+
   return (
-    <>
+    <main className='pt-16 bg-slate-100 min-h-[calc(100vh)]'>
       <Toaster />
-      <Routes>
+      <Routes  >
         <Route path="/" element={<Header />} >
-          <Route path="/" element={<Home />} />
+          <Route index element={<Home />} />
           <Route path="/menu" element={<Menu />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
@@ -29,7 +48,7 @@ function App() {
           <Route path="/login" element={<Login />} />
         </Route>
       </Routes>
-    </>
+    </main>
   );
 }
 
